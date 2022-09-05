@@ -16,17 +16,17 @@ if countries != '':
     df_filtrado.loc[:, 'absolute'] = df_filtrado.loc[:, 'absolute'].fillna(0)
     norm = (df_filtrado.absolute - df_filtrado.absolute.min()) / (df_filtrado.absolute.max() - df_filtrado.absolute.min())
     df_filtrado.loc[:, 'volume_norm'] = norm
-    q30, q50, q80, q98 = np.percentile(df_filtrado['volume_norm'],[30,50,80,98])
+    q30, q50, q80, q95 = np.percentile(df_filtrado['volume_norm'],[30,50,80,95])
     
-    def get_percentile_by_value(value, q30 = q30, q50=q50,q80=q80, q98=q98):
+    def get_percentile_by_value(value, q20 = q20, q50=q50,q70=q70, q95=q95):
         label = ''
-        if value < q30:
+        if value < q20:
             label = 'Very Low'
-        elif (value >= q30) and (value < q50):
+        elif (value >= q20) and (value < q50):
             label = 'Low'
-        elif (value >= q50) and (value < q80):
+        elif (value >= q50) and (value < q70):
             label = 'Medium'
-        elif (value >= q80) and (value < q98):
+        elif (value >= q70) and (value < q95):
             label = 'High'
         else:
             label = 'Very High'
