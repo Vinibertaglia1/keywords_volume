@@ -18,7 +18,7 @@ if countries != '':
     df_filtrado.loc[:, 'volume_norm'] = norm
     q30, q50, q80, q95 = np.percentile(df_filtrado['volume_norm'],[30,50,80,95])
     
-    def get_percentile_by_value(value, q20 = q20, q50=q50,q70=q70, q95=q95):
+    def get_percentile_by_value(value, q20 = q20, q50 = q50,q70 = q70, q95 = q95):
         label = ''
         if value < q20:
             label = 'Very Low'
