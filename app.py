@@ -18,7 +18,7 @@ if countries != '':
     df_filtrado.loc[:, 'volume_norm'] = norm
     q20, q50, q70, q95 = np.percentile(df_filtrado['volume_norm'],[20,50,70,95])
     
-    def get_percentile_by_value(value, q20 = q20, q50 = q50, q70 = q70, q95 = q95):
+    def get_percentile_by_value(value, q20 = q20, q50=q50 ,q70=q70, q95=q95):
         label = ''
         if value < q20:
             label = 'Very Low'
@@ -35,7 +35,8 @@ if countries != '':
     df_filtrado.loc[:, 'volume_label'] = df_filtrado.loc[:, 'volume_norm'].apply(get_percentile_by_value)
     textos =  df_filtrado.loc[:, 'keyword'].unique().tolist()
     textos.insert(0,'')
-
+    
+    
     feature = st.selectbox("Choose a Feature", ['','Keywords Database','Enter your Keyword'])
     
     df_filtrado.loc[:, 'position'] = df_filtrado.loc[:, 'absolute'].rank()
@@ -51,6 +52,8 @@ if countries != '':
    
     df_filtrado.loc[:, 'position_percentage'] = df_filtrado['volume_posit'].apply(get_percentage_of_total)
     
+    
+    
     saida = st.selectbox('Choose and press enter to add keywords',textos)
     
     if feature == 'Keywords Database':
@@ -59,6 +62,8 @@ if countries != '':
         
         #if df_text['absolute'].iloc[-1] == 0:
             #df_text['position_percentage'] = 0
+            
+
             
         col1, col2, col3 = st.columns(3)
         if saida != "":
@@ -78,7 +83,8 @@ if countries != '':
                 st.markdown(f"<h3> {volume_label}</h3>", unsafe_allow_html=True)
     elif feature == 'Enter your Keyword':
         volume_input = st.number_input('Input the Volume from Tool')
-        new_volume = df_filtrado[df_filtrado['absolute'] == int(volume_input)]
+        
+        
         col2, col3 = st.columns(2)
         with col2:
             st.markdown("<h1>  Volume </h1>", unsafe_allow_html=True)
@@ -87,6 +93,25 @@ if countries != '':
 
         with col3:
             st.markdown("<h1> Search Volume </h1>", unsafe_allow_html=True)
-            volume_label = new_volume['volume_label'].iloc[-1]
-            st.markdown(f"<h3> {volume_label}</h3>", unsafe_allow_html=True)
             
+            def get_input_label(value):
+                label2 = ''
+                if value < 500:
+                    label2 = 'Very Low'
+                elif (value >= 500) and (value < 5000):
+                    label2 = 'Low'
+                elif (value >= 5000) and (value < 50000):
+                    label2 = 'Medium'
+                elif (value >= 50000) and (value < 500000):
+                    label2 = 'High'
+                else:
+                    label2 = 'Very High'
+                return label2 
+    
+    
+            volume_label = get_input_label(volume_input)
+            st.markdown(f"<h3> {volume_label}</h3>", unsafe_allow_html=True)
+    
+    
+    
+          
