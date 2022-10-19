@@ -4,7 +4,7 @@ import streamlit as st
 import scipy.stats as stats
 import numpy as np
 
-df = pd.read_csv('googleVolumeSearch.csv')
+df = pd.read_csv('volume-2022-10.csv')
 
 st.markdown('<h1 style = "border-radius: 50px; color: #FFFFFF;text-align:center;text-transform: uppercase; background:-webkit-linear-gradient(#1088ff,#0bd6d4);"> Keyword Analysis </h1>',unsafe_allow_html=True)
 country = df.loc[:, 'country'].unique().tolist()
@@ -94,15 +94,17 @@ if countries != '':
         with col3:
             st.markdown("<h1> Search Volume </h1>", unsafe_allow_html=True)
             
-            def get_input_label(value):
+            z20, z50, z70, z95 = np.percentile(df_filtrado['absolute'],[20,50,70,95])
+            
+            def get_input_label(value, z20 = z20, z50=z50 ,z70=z70, z95=z95):
                 label2 = ''
-                if value < 500:
+                if value < z20:
                     label2 = 'Very Low'
-                elif (value >= 500) and (value < 5000):
+                elif (value >= z20) and (value < z50):
                     label2 = 'Low'
-                elif (value >= 5000) and (value < 50000):
+                elif (value >= z50) and (value < z70):
                     label2 = 'Medium'
-                elif (value >= 50000) and (value < 500000):
+                elif (value >= z70) and (value < z95):
                     label2 = 'High'
                 else:
                     label2 = 'Very High'
@@ -113,5 +115,16 @@ if countries != '':
             st.markdown(f"<h3> {volume_label}</h3>", unsafe_allow_html=True)
     
     
+   
     
-          
+    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+      
